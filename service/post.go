@@ -15,12 +15,11 @@ func NewPostService(repo *repository.PostRepository) contract.PostService {
 	return &PostServiceImpl{repo: repo}
 }
 
-func (s *PostServiceImpl) CreatePost(postDTO dto.PostRequest, userID uint64, author string) error {
+func (s *PostServiceImpl) CreatePost(postDTO dto.PostRequest) error {
 	post := entity.Post{
 		Title:   postDTO.Title,
 		Content: postDTO.Content,
-		Author:  author,
-		UserID:  userID,
+		Author:  postDTO.Author,
 	}
 	return s.repo.InsertPost(&post) // Ensure to return the error if any
 }

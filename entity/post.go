@@ -9,5 +9,4 @@ type Post struct {
 	Author    string    `json:"author"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
-	UserID    uint64    `gorm:"column:user_id;not null;uniqueIndex"`
 }

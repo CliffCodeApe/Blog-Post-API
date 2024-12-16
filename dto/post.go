@@ -15,6 +15,7 @@ type GetPost struct {
 type PostRequest struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
+	Author  string `json:"author"`
 }
 
 type PostResponse struct {
