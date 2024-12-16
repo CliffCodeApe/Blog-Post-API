@@ -23,6 +23,7 @@ func NewPostHandler(service contract.PostService) *PostHandler {
 // @Tags posts
 // @Accept json
 // @Produce json
+// @Param post body dto.PostRequest true "Post data"
 // @Success 201 {object} dto.PostResponse "Post Created Successfully"
 // @Failure 400 {object} dto.InvalidInputErrorResponse "Invalid input data"
 // @Failure 404 {object} dto.NotFoundErrorResponse "Resource not found"
@@ -40,7 +41,7 @@ func (h *PostHandler) CreatePost(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Post created successfully"})
+	c.JSON(http.StatusOK, gin.H{"status": "201", "message": "Post created successfully"})
 }
 
 // GetAllPosts godoc
@@ -49,7 +50,7 @@ func (h *PostHandler) CreatePost(c *gin.Context) {
 // @Tags posts
 // @Accept json
 // @Produce json
-// @Success 200 {object} dto.PostResponse "Post retrieved successfully"
+// @Success 200 {object} dto.GetResponse "Post retrieved successfully"
 // @Failure 404 {object} dto.NotFoundErrorResponse "Post not found"
 // @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
 // @Router /posts/ [get]
@@ -65,7 +66,7 @@ func (h *PostHandler) GetAllPosts(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "Post ID"
-// @Success 200 {object} dto.PostResponse "Post retrieved successfully"
+// @Success 200 {object} dto.GetResponse "Post retrieved successfully"
 // @Failure 404 {object} dto.NotFoundErrorResponse "Post not found"
 // @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
 // @Router /posts/{id} [get]
@@ -92,8 +93,8 @@ func (h *PostHandler) GetPostByID(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "Post ID"
-// @Param post body dto.PostRequest true "Post data"
-// @Success 200 {object} dto.PostResponse "Post updated successfully"
+// @Param post body dto.EditRequest true "Post data"
+// @Success 200 {object} dto.EditResponse "Post updated successfully"
 // @Failure 400 {object} dto.InvalidInputErrorResponse "Invalid input data"
 // @Failure 404 {object} dto.NotFoundErrorResponse "Post not found"
 // @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
@@ -117,7 +118,7 @@ func (h *PostHandler) UpdatePost(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Post updated successfully"})
+	c.JSON(http.StatusOK, gin.H{"status": "200", "message": "Post updated successfully"})
 }
 
 // DeletePost godoc
@@ -127,7 +128,7 @@ func (h *PostHandler) UpdatePost(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "Post ID"
-// @Success 204 "Post deleted successfully"
+// @Success 200 {object} dto.DeleteResponse "Post updated successfully"
 // @Failure 404 {object} dto.NotFoundErrorResponse "Post not found"
 // @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
 // @Router /posts/{id} [delete]
@@ -143,5 +144,5 @@ func (h *PostHandler) DeletePost(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Post deleted successfully"})
+	c.JSON(http.StatusOK, gin.H{"status": "204", "message": "Post deleted successfully"})
 }

@@ -32,7 +32,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Post retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/dto.PostResponse"
+                            "$ref": "#/definitions/dto.GetResponse"
                         }
                     },
                     "404": {
@@ -61,6 +61,17 @@ const docTemplate = `{
                     "posts"
                 ],
                 "summary": "Creates Post",
+                "parameters": [
+                    {
+                        "description": "Post data",
+                        "name": "post",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.PostRequest"
+                        }
+                    }
+                ],
                 "responses": {
                     "201": {
                         "description": "Post Created Successfully",
@@ -115,7 +126,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Post retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/dto.PostResponse"
+                            "$ref": "#/definitions/dto.GetResponse"
                         }
                     },
                     "404": {
@@ -158,7 +169,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.PostRequest"
+                            "$ref": "#/definitions/dto.EditRequest"
                         }
                     }
                 ],
@@ -166,7 +177,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Post updated successfully",
                         "schema": {
-                            "$ref": "#/definitions/dto.PostResponse"
+                            "$ref": "#/definitions/dto.EditResponse"
                         }
                     },
                     "400": {
@@ -211,8 +222,11 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "204": {
-                        "description": "Post deleted successfully"
+                    "200": {
+                        "description": "Post updated successfully",
+                        "schema": {
+                            "$ref": "#/definitions/dto.DeleteResponse"
+                        }
                     },
                     "404": {
                         "description": "Post not found",
@@ -254,7 +268,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.PostRequest"
+                            "$ref": "#/definitions/dto.EditRequest"
                         }
                     }
                 ],
@@ -262,7 +276,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Post updated successfully",
                         "schema": {
-                            "$ref": "#/definitions/dto.PostResponse"
+                            "$ref": "#/definitions/dto.EditResponse"
                         }
                     },
                     "400": {
@@ -288,6 +302,56 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "dto.DeleteResponse": {
+            "type": "object",
+            "properties": {
+                "Message": {
+                    "type": "string",
+                    "example": "Post Successfully Deleted"
+                },
+                "status": {
+                    "type": "integer",
+                    "example": 204
+                }
+            }
+        },
+        "dto.EditRequest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.EditResponse": {
+            "type": "object",
+            "properties": {
+                "Message": {
+                    "type": "string",
+                    "example": "Post Successfully Updated"
+                },
+                "status": {
+                    "type": "integer",
+                    "example": 200
+                }
+            }
+        },
+        "dto.GetResponse": {
+            "type": "object",
+            "properties": {
+                "Message": {
+                    "type": "string",
+                    "example": "Post Successfully Retreived"
+                },
+                "status": {
+                    "type": "integer",
+                    "example": 200
+                }
+            }
+        },
         "dto.InternalServerErrorResponse": {
             "type": "object",
             "properties": {

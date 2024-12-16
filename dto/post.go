@@ -17,14 +17,29 @@ type PostRequest struct {
 	Author  string `json:"author"`
 }
 
+type EditRequest struct {
+	Title   *string `json:"title,omitempty"`
+	Content *string `json:"content,omitempty"`
+}
+
+type GetResponse struct {
+	Status  int    `json:"status" example:"200"`
+	Message string `json:"Message" example:"Post Successfully Retreived"`
+}
+
 type PostResponse struct {
 	Status  int    `json:"status" example:"201"`
 	Message string `json:"Message" example:"Post Successfully Created"`
 }
 
-type EditRequest struct {
-	Title   *string `json:"title,omitempty"`
-	Content *string `json:"content,omitempty"`
+type EditResponse struct {
+	Status  int    `json:"status" example:"200"`
+	Message string `json:"Message" example:"Post Successfully Updated"`
+}
+
+type DeleteResponse struct {
+	Status  int    `json:"status" example:"204"`
+	Message string `json:"Message" example:"Post Successfully Deleted"`
 }
 
 // Error Respones

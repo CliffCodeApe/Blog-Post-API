@@ -1,4 +1,38 @@
 definitions:
+  dto.DeleteResponse:
+    properties:
+      Message:
+        example: Post Successfully Deleted
+        type: string
+      status:
+        example: 204
+        type: integer
+    type: object
+  dto.EditRequest:
+    properties:
+      content:
+        type: string
+      title:
+        type: string
+    type: object
+  dto.EditResponse:
+    properties:
+      Message:
+        example: Post Successfully Updated
+        type: string
+      status:
+        example: 200
+        type: integer
+    type: object
+  dto.GetResponse:
+    properties:
+      Message:
+        example: Post Successfully Retreived
+        type: string
+      status:
+        example: 200
+        type: integer
+    type: object
   dto.InternalServerErrorResponse:
     properties:
       error_code:
@@ -58,7 +92,7 @@ paths:
         "200":
           description: Post retrieved successfully
           schema:
-            $ref: '#/definitions/dto.PostResponse'
+            $ref: '#/definitions/dto.GetResponse'
         "404":
           description: Post not found
           schema:
@@ -74,6 +108,13 @@ paths:
       consumes:
       - application/json
       description: Creates a new post
+      parameters:
+      - description: Post data
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PostRequest'
       produces:
       - application/json
       responses:
@@ -110,8 +151,10 @@ paths:
       produces:
       - application/json
       responses:
-        "204":
-          description: Post deleted successfully
+        "200":
+          description: Post updated successfully
+          schema:
+            $ref: '#/definitions/dto.DeleteResponse'
         "404":
           description: Post not found
           schema:
@@ -139,7 +182,7 @@ paths:
         "200":
           description: Post retrieved successfully
           schema:
-            $ref: '#/definitions/dto.PostResponse'
+            $ref: '#/definitions/dto.GetResponse'
         "404":
           description: Post not found
           schema:
@@ -166,14 +209,14 @@ paths:
         name: post
         required: true
         schema:
-          $ref: '#/definitions/dto.PostRequest'
+          $ref: '#/definitions/dto.EditRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Post updated successfully
           schema:
-            $ref: '#/definitions/dto.PostResponse'
+            $ref: '#/definitions/dto.EditResponse'
         "400":
           description: Invalid input data
           schema:
@@ -204,14 +247,14 @@ paths:
         name: post
         required: true
         schema:
-          $ref: '#/definitions/dto.PostRequest'
+          $ref: '#/definitions/dto.EditRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Post updated successfully
           schema:
-            $ref: '#/definitions/dto.PostResponse'
+            $ref: '#/definitions/dto.EditResponse'
         "400":
           description: Invalid input data
           schema:
