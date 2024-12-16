@@ -2,7 +2,6 @@ package main
 
 import (
 	"blog_post/handler"
-	"blog_post/middleware"
 	"blog_post/repository"
 	"blog_post/service"
 	"log"
@@ -45,29 +44,18 @@ func main() {
 
 	// Initialize repositories
 	postRepo := repository.NewPostRepository(db)
-	userRepo := repository.NewAuthRepository(db)
 
 	// Initialize services
 	postService := service.NewPostService(postRepo)
-	authService := service.NewAuthService(userRepo)
 
 	// Initialize handlers
 	postHandler := handler.NewPostHandler(postService)
-	authHandler := handler.NewAuthHandler(authService)
 
 	// Setup routes
 	r := gin.Default()
 
-	r.GET("/posts", postHandler.GetPosts)
-
-	// Auth routes
-	auth := r.Group("/auth")
-	auth.POST("/register", authHandler.Register)
-	auth.POST("/login", authHandler.Login)
-
-	// Protected routes
 	protected := r.Group("/posts")
-	protected.Use(middleware.AuthMiddleware())
+	protected.GET("/", postHandler.GetPosts)
 	protected.POST("/", postHandler.CreatePost)
 
 	// Start the server
