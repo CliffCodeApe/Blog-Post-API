@@ -7,8 +7,12 @@ import (
 	"log"
 	"os"
 
+	_ "blog_post/docs" // Import the generated docs
+
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	swaggerFiles "github.com/swaggo/files"     // swagger embed files
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -54,8 +58,10 @@ func main() {
 	// Setup routes
 	r := gin.Default()
 
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	protected := r.Group("/posts")
-	protected.GET("/", postHandler.GetPosts)
+	protected.GET("/", postHandler.GetAllPosts)
 	protected.GET("/:id", postHandler.GetPostByID)
 	protected.POST("/", postHandler.CreatePost)
 	protected.PUT("/:id", postHandler.UpdatePost)

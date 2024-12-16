@@ -24,7 +24,7 @@ func (s *PostServiceImpl) CreatePost(postDTO dto.PostRequest) error {
 	return s.postRepo.InsertPost(&post)
 }
 
-func (s *PostServiceImpl) GetPosts() ([]dto.GetPost, error) {
+func (s *PostServiceImpl) GetAllPosts() ([]dto.GetPost, error) {
 	posts, err := s.postRepo.FindAll()
 	if err != nil {
 		return nil, err

@@ -1,0 +1,230 @@
+definitions:
+  dto.InternalServerErrorResponse:
+    properties:
+      error_code:
+        example: 500
+        type: integer
+      message:
+        example: Internal server error
+        type: string
+    type: object
+  dto.InvalidInputErrorResponse:
+    properties:
+      error_code:
+        example: 400
+        type: integer
+      message:
+        example: Invalid input data
+        type: string
+    type: object
+  dto.NotFoundErrorResponse:
+    properties:
+      error_code:
+        example: 404
+        type: integer
+      message:
+        example: Resource not found
+        type: string
+    type: object
+  dto.PostRequest:
+    properties:
+      author:
+        type: string
+      content:
+        type: string
+      title:
+        type: string
+    type: object
+  dto.PostResponse:
+    properties:
+      Message:
+        example: Post Successfully Created
+        type: string
+      status:
+        example: 201
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /posts/:
+    get:
+      consumes:
+      - application/json
+      description: Get all the posts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Post retrieved successfully
+          schema:
+            $ref: '#/definitions/dto.PostResponse'
+        "404":
+          description: Post not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      summary: Get All Posts
+      tags:
+      - posts
+    post:
+      consumes:
+      - application/json
+      description: Creates a new post
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Post Created Successfully
+          schema:
+            $ref: '#/definitions/dto.PostResponse'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/dto.InvalidInputErrorResponse'
+        "404":
+          description: Resource not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      summary: Creates Post
+      tags:
+      - posts
+  /posts/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a post by its ID
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Post deleted successfully
+        "404":
+          description: Post not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      summary: Delete Post
+      tags:
+      - posts
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a post by its ID
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Post retrieved successfully
+          schema:
+            $ref: '#/definitions/dto.PostResponse'
+        "404":
+          description: Post not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      summary: Get Post by ID
+      tags:
+      - posts
+    patch:
+      consumes:
+      - application/json
+      description: Update an existing post
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Post data
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Post updated successfully
+          schema:
+            $ref: '#/definitions/dto.PostResponse'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/dto.InvalidInputErrorResponse'
+        "404":
+          description: Post not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      summary: Update Post
+      tags:
+      - posts
+    put:
+      consumes:
+      - application/json
+      description: Update an existing post
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Post data
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Post updated successfully
+          schema:
+            $ref: '#/definitions/dto.PostResponse'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/dto.InvalidInputErrorResponse'
+        "404":
+          description: Post not found
+          schema:
+            $ref: '#/definitions/dto.NotFoundErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.InternalServerErrorResponse'
+      summary: Update Post
+      tags:
+      - posts
+swagger: "2.0"

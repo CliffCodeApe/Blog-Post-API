@@ -17,6 +17,17 @@ func NewPostHandler(service contract.PostService) *PostHandler {
 	return &PostHandler{postService: service}
 }
 
+// CreatePost godoc
+// @Summary Creates Post
+// @Description Creates a new post
+// @Tags posts
+// @Accept json
+// @Produce json
+// @Success 201 {object} dto.PostResponse "Post Created Successfully"
+// @Failure 400 {object} dto.InvalidInputErrorResponse "Invalid input data"
+// @Failure 404 {object} dto.NotFoundErrorResponse "Resource not found"
+// @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error
+// @Router /posts/ [post]
 func (h *PostHandler) CreatePost(c *gin.Context) {
 	var postDTO dto.PostRequest
 	if err := c.ShouldBindJSON(&postDTO); err != nil {
@@ -32,6 +43,32 @@ func (h *PostHandler) CreatePost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Post created successfully"})
 }
 
+// GetAllPosts godoc
+// @Summary Get All Posts
+// @Description Get all the posts
+// @Tags posts
+// @Accept json
+// @Produce json
+// @Success 200 {object} dto.PostResponse "Post retrieved successfully"
+// @Failure 404 {object} dto.NotFoundErrorResponse "Post not found"
+// @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
+// @Router /posts/ [get]
+func (h *PostHandler) GetAllPosts(c *gin.Context) {
+	posts, _ := h.postService.GetAllPosts()
+	c.JSON(http.StatusOK, posts)
+}
+
+// GetPostByID godoc
+// @Summary Get Post by ID
+// @Description Retrieve a post by its ID
+// @Tags posts
+// @Accept json
+// @Produce json
+// @Param id path int true "Post ID"
+// @Success 200 {object} dto.PostResponse "Post retrieved successfully"
+// @Failure 404 {object} dto.NotFoundErrorResponse "Post not found"
+// @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
+// @Router /posts/{id} [get]
 func (h *PostHandler) GetPostByID(c *gin.Context) {
 	postId, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
@@ -48,11 +85,20 @@ func (h *PostHandler) GetPostByID(c *gin.Context) {
 	c.JSON(http.StatusOK, post)
 }
 
-func (h *PostHandler) GetPosts(c *gin.Context) {
-	posts, _ := h.postService.GetPosts()
-	c.JSON(http.StatusOK, posts)
-}
-
+// UpdatePost godoc
+// @Summary Update Post
+// @Description Update an existing post
+// @Tags posts
+// @Accept json
+// @Produce json
+// @Param id path int true "Post ID"
+// @Param post body dto.PostRequest true "Post data"
+// @Success 200 {object} dto.PostResponse "Post updated successfully"
+// @Failure 400 {object} dto.InvalidInputErrorResponse "Invalid input data"
+// @Failure 404 {object} dto.NotFoundErrorResponse "Post not found"
+// @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
+// @Router /posts/{id} [put]
+// @Router /posts/{id} [patch]
 func (h *PostHandler) UpdatePost(c *gin.Context) {
 	var req dto.EditRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -74,6 +120,17 @@ func (h *PostHandler) UpdatePost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Post updated successfully"})
 }
 
+// DeletePost godoc
+// @Summary Delete Post
+// @Description Delete a post by its ID
+// @Tags posts
+// @Accept json
+// @Produce json
+// @Param id path int true "Post ID"
+// @Success 204 "Post deleted successfully"
+// @Failure 404 {object} dto.NotFoundErrorResponse "Post not found"
+// @Failure 500 {object} dto.InternalServerErrorResponse "Internal server error"
+// @Router /posts/{id} [delete]
 func (h *PostHandler) DeletePost(c *gin.Context) {
 	postId, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {

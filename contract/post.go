@@ -7,7 +7,7 @@ import (
 
 type PostService interface {
 	CreatePost(postDTO dto.PostRequest) error
-	GetPosts() ([]dto.GetPost, error)
+	GetAllPosts() ([]dto.GetPost, error)
 	GetPostByID(id uint64) (entity.Post, error)
 	UpdatePost(id uint64, postDTO dto.EditRequest) error
 	DeletePost(id uint64) error
