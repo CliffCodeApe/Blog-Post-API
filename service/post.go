@@ -8,11 +8,11 @@ import (
 )
 
 type PostServiceImpl struct {
-	repo *repository.PostRepository
+	postRepo *repository.PostRepository
 }
 
 func NewPostService(repo *repository.PostRepository) contract.PostService {
-	return &PostServiceImpl{repo: repo}
+	return &PostServiceImpl{postRepo: repo}
 }
 
 func (s *PostServiceImpl) CreatePost(postDTO dto.PostRequest) error {
@@ -21,18 +21,19 @@ func (s *PostServiceImpl) CreatePost(postDTO dto.PostRequest) error {
 		Content: postDTO.Content,
 		Author:  postDTO.Author,
 	}
-	return s.repo.InsertPost(&post) // Ensure to return the error if any
+	return s.postRepo.InsertPost(&post)
 }
 
 func (s *PostServiceImpl) GetPosts() ([]dto.GetPost, error) {
-	posts, err := s.repo.FindAll() // Call the new GetAllPosts method
+	posts, err := s.postRepo.FindAll()
 	if err != nil {
-		return nil, err // Return the error if there is one
+		return nil, err
 	}
 
 	var result []dto.GetPost
 	for _, post := range posts {
 		result = append(result, dto.GetPost{
+			ID:        int(post.ID),
 			Title:     post.Title,
 			Content:   post.Content,
 			Author:    post.Author,
@@ -41,4 +42,23 @@ func (s *PostServiceImpl) GetPosts() ([]dto.GetPost, error) {
 		})
 	}
 	return result, nil
+}
+
+func (s *PostServiceImpl) GetPostByID(id uint64) (entity.Post, error) {
+	return s.postRepo.FindById(id)
+}
+
+func (s *PostServiceImpl) UpdatePost(id uint64, req dto.EditRequest) error {
+	post := entity.Post{}
+	if req.Title != nil {
+		post.Title = *req.Title
+	}
+	if req.Content != nil {
+		post.Content = *req.Content
+	}
+	return s.postRepo.UpdatePost(id, post)
+}
+
+func (s *PostServiceImpl) DeletePost(id uint64) error {
+	return s.postRepo.DeletePost(id)
 }

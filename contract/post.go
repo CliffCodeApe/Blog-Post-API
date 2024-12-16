@@ -2,11 +2,13 @@ package contract
 
 import (
 	"blog_post/dto"
+	"blog_post/entity"
 )
 
 type PostService interface {
 	CreatePost(postDTO dto.PostRequest) error
 	GetPosts() ([]dto.GetPost, error)
-	// UpdatePost(id int, postDTO dto.EditRequest) error
-	// DeletePost(id int) error
+	GetPostByID(id uint64) (entity.Post, error)
+	UpdatePost(id uint64, postDTO dto.EditRequest) error
+	DeletePost(id uint64) error
 }

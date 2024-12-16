@@ -27,3 +27,17 @@ func (r *PostRepository) FindAll() ([]entity.Post, error) {
 	}
 	return posts, nil
 }
+
+func (r *PostRepository) FindById(id uint64) (entity.Post, error) {
+	var post entity.Post
+	err := r.db.First(&post, id).Error
+	return post, err
+}
+
+func (r *PostRepository) UpdatePost(id uint64, post entity.Post) error {
+	return r.db.Model(&entity.Post{}).Where("post_id = ?", id).Updates(post).Error
+}
+
+func (r *PostRepository) DeletePost(id uint64) error {
+	return r.db.Delete(&entity.Post{}, id).Error
+}

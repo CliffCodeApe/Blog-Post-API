@@ -56,7 +56,11 @@ func main() {
 
 	protected := r.Group("/posts")
 	protected.GET("/", postHandler.GetPosts)
+	protected.GET("/:id", postHandler.GetPostByID)
 	protected.POST("/", postHandler.CreatePost)
+	protected.PUT("/:id", postHandler.UpdatePost)
+	protected.PATCH("/:id", postHandler.UpdatePost)
+	protected.DELETE("/:id", postHandler.DeletePost)
 
 	// Start the server
 	log.Printf("Starting server on port %s", port)

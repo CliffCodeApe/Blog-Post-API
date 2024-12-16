@@ -3,32 +3,18 @@ package handler
 import (
 	"blog_post/contract"
 	"blog_post/dto"
-	"errors"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 type PostHandler struct {
-	service contract.PostService
+	postService contract.PostService
 }
 
 func NewPostHandler(service contract.PostService) *PostHandler {
-	return &PostHandler{service: service}
-}
-
-func extractUser(c *gin.Context) (uint64, string, error) {
-	userID, exists := c.Get("userId")
-	if !exists {
-		return 0, "", errors.New("user ID not found in context")
-	}
-
-	username, exists := c.Get("username")
-	if !exists {
-		return 0, "", errors.New("username not found in context")
-	}
-
-	return userID.(uint64), username.(string), nil
+	return &PostHandler{postService: service}
 }
 
 func (h *PostHandler) CreatePost(c *gin.Context) {
@@ -38,15 +24,7 @@ func (h *PostHandler) CreatePost(c *gin.Context) {
 		return
 	}
 
-	// Extract user ID and username from the token
-	userID, username, err := extractUser(c)
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-		return
-	}
-
-	// Create the post using the extracted user information
-	if err := h.service.CreatePost(postDTO, userID, username); err != nil {
+	if err := h.postService.CreatePost(postDTO); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create post"})
 		return
 	}
@@ -54,7 +32,59 @@ func (h *PostHandler) CreatePost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Post created successfully"})
 }
 
+func (h *PostHandler) GetPostByID(c *gin.Context) {
+	postId, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid post ID"})
+		return
+	}
+
+	post, err := h.postService.GetPostByID(uint64(postId))
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Post not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, post)
+}
+
 func (h *PostHandler) GetPosts(c *gin.Context) {
-	posts, _ := h.service.GetPosts()
+	posts, _ := h.postService.GetPosts()
 	c.JSON(http.StatusOK, posts)
+}
+
+func (h *PostHandler) UpdatePost(c *gin.Context) {
+	var req dto.EditRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	postId, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid post ID"})
+		return
+	}
+
+	if err := h.postService.UpdatePost(uint64(postId), req); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update post"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Post updated successfully"})
+}
+
+func (h *PostHandler) DeletePost(c *gin.Context) {
+	postId, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid post ID"})
+		return
+	}
+
+	if err := h.postService.DeletePost(uint64(postId)); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete post"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Post deleted successfully"})
 }

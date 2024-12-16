@@ -9,7 +9,6 @@ type GetPost struct {
 	Author    string    `json:"author"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
-	UserID    int       `json:"user_id"`
 }
 
 type PostRequest struct {
@@ -24,7 +23,6 @@ type PostResponse struct {
 }
 
 type EditRequest struct {
-	Title   string `json:"title"`
-	Content string `json:"content"`
-	Author  string `json:"author"`
+	Title   *string `json:"title,omitempty"`
+	Content *string `json:"content,omitempty"`
 }
